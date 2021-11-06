@@ -4,8 +4,8 @@ from django.urls import reverse #Used to generate URLs by reversing the URL patt
 from django.contrib.auth.models import User #Blog author or commenter
 
 
-# def user_directory_path(instance, filename):
-#     return 'blog/{0}/{1}'.format(instance.author.id, filename)
+def user_directory_path(instance, filename): # creates a folder named after blogger id in media folder for user uploaded images
+    return 'blog_pics/{0}/{1}'.format(instance.blogger.id, filename)
 
 
 class Category(models.Model):
@@ -37,10 +37,10 @@ class Post(models.Model):
     published_date = models.DateField(default=date.today)
     created_date = models.DateTimeField(auto_now_add = True)
     updated_date = models.DateTimeField(auto_now = True)
-    slug = models.SlugField(max_length=200, unique=True) # how-to-learn-django
-    status = models.IntegerField(choices=STATUS, default=0) 
-    image = models.ImageField(upload_to='blog_pics', default='media/default_post_image.png', blank=True)
-    
+    slug = models.SlugField(max_length=200, unique=True, blank=True) # how-to-learn-django
+    status = models.CharField(max_length=20, choices=STATUS, default='d') 
+    #image = models.ImageField(upload_to='blog_pics', default='media/default_post_image.png', blank=True)
+    image = models.ImageField(upload_to=user_directory_path, default='media/default_post_image.png', blank=True)
     # ManyToManyField used because a category can contain many posts. Posts can cover many categories.
     # Category class has already been defined so we can specify the object above.
     category = models.ManyToManyField(Category, help_text='Select a category for this post')
@@ -86,28 +86,55 @@ class Post(models.Model):
         return self.comment_set.all()
 
 
-# class Comment(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-#     time_stamp = models.DateTimeField(auto_now_add=True)
-#     content = models.TextField()
+class Comment(models.Model):
+    """
+    Model representing a comment against a blog post.
+    """
+    commentor = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    comment_date = models.DateTimeField(auto_now_add=True)
+    content = models.TextField(max_length=1000, help_text="Enter comment about blog here.")
 
-#     def __str__(self):
-#         return self.user.username
+    def __str__(self):
+        return self.user.username
+    
+    class Meta:
+        ordering = ["-comment_date"]
+
+    def __str__(self):
+        """
+        String for representing the Model object.
+        """
+        len_title=75 # if this is  a long comment first show part of it
+        if len(self.content)>len_title:
+            titlestring=self.content[:len_title] + '...'
+        else:
+            titlestring=self.content
+        return (f"{self.commentor} - {titlestring} ")
+    
+    def display_commentor(self):
+        """Create a string for the Commentor user. This is required to display Comments in Admin."""
+        return self.commentor.username
+
+    display_commentor.short_description = 'Commentor'
+
+class Like(models.Model):
+    liker = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    like_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.liker.username + " " + self.post.title
+    
+    class Meta:
+        ordering = ["-like_date"]
 
 
-# class Like(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
-#     def __str__(self):
-#         return self.user.username
+class PostView(models.Model):
+    reader = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    view_date = models.DateTimeField(auto_now_add=True)
 
-
-# class PostView(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-#     time_stamp = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.user.username
+    def __str__(self):
+        return self.reader.username + " " + self.post.title
