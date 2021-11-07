@@ -1,13 +1,16 @@
 from django.urls import path
-#from .views import post_list, post_create, post_detail, post_update, post_delete, like
+from .views import post_detail, post_list, post_create, post_update, post_delete, like  
+#from .views import HomeView, PostCreate
 
 
-#app_name = "dastugo_blog_app"
+app_name = "dastugo_blog_app" # if we have more than one apps to have a better routing we wil luse the app name before the route.
 urlpatterns = [
-    # path("", post_list, name="list"),
-    # path("create/", post_create, name="create"),
-    # path("<str:slug>/", post_detail, name="post-detail"),
-    # path("<str:slug>/update/", post_update, name="update"),
-    # path("<str:slug>/delete/", post_delete, name="delete"),
-    # path("<str:slug>/like/", like, name="like"),
+    #path('', HomeView.as_view(), name='post-list'),
+    path("", post_list, name="post-list"),
+    path("create/", post_create, name="post-create"),
+    #path("create/", PostCreate.as_view(), name="post-create"),
+    path("<str:slug>/", post_detail, name="post-detail"),
+    path("update/<str:slug>/", post_update, name="post-update"),
+    path("delete/<str:slug>/", post_delete, name="post-delete"),
+    path("like/<str:slug>/", like, name="like"),
 ]

@@ -9,6 +9,6 @@ from .utils import get_random_code
 def pre_save_create_slug(sender, instance, **kwargs): # instance is the Post instance, *kwargs required because we don't know the # of args in the background
     if not instance.slug:
         instance.slug = slugify(
-            #instance.title + " " + get_random_code())
-            instance.title + " " + instance.blogger.username)
+            instance.title + " " + get_random_code())
+            #instance.title + " " + instance.blogger.username)
 

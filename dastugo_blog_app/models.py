@@ -1,7 +1,8 @@
 from django.db import models
-from datetime import date
+from datetime import date, datetime
 from django.urls import reverse #Used to generate URLs by reversing the URL patterns
 from django.contrib.auth.models import User #Blog author or commenter
+from .utils import get_random_digit # to generate a randon one digit number for comment, like view count at the initial stage
 
 
 def user_directory_path(instance, filename): # creates a folder named after blogger id in media folder for user uploaded images
@@ -20,33 +21,34 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-STATUS = (
-    ('d',"Draft"),
-    ('p',"Publish"),
-    ('a',"Archieved")
-)
-
 class Post(models.Model):
     """
     Model representing a blog post.
     """
+    STATUS = (
+        ('d',"Draft"),
+        ('p',"Publish"),
+        ('a',"Archieved")
+    )
+    
     title = models.CharField(max_length=200)
     blogger = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     # Foreign Key used because post can only have one author/User, but bloggsers can have multiple posts.
     content = models.TextField(max_length=10000, help_text="Enter you blog text here.")
-    published_date = models.DateField(default=date.today)
+    
+    publish_date = models.DateTimeField(blank=True, default=datetime.now())
     created_date = models.DateTimeField(auto_now_add = True)
     updated_date = models.DateTimeField(auto_now = True)
     slug = models.SlugField(max_length=200, unique=True, blank=True) # how-to-learn-django
     status = models.CharField(max_length=20, choices=STATUS, default='d') 
     #image = models.ImageField(upload_to='blog_pics', default='media/default_post_image.png', blank=True)
-    image = models.ImageField(upload_to=user_directory_path, default='media/default_post_image.png', blank=True)
+    image = models.ImageField(upload_to=user_directory_path, default='default_post_image.png', blank=True)
     # ManyToManyField used because a category can contain many posts. Posts can cover many categories.
-    # Category class has already been defined so we can specify the object above.
-    category = models.ManyToManyField(Category, help_text='Select a category for this post')
+    # Category class has already been defined so we can specify the object below.
+    category = models.ManyToManyField(Category, help_text='Select  category(ies) for this post')
     
     class Meta:
-        ordering = ["-published_date"]
+        ordering = ["-publish_date"]
         #ordering = ["-created_date"]
         #permissions = (("can_mark_archieved", "Set post status as archieved"),)
         
@@ -67,8 +69,15 @@ class Post(models.Model):
     
     # comment count for each post
     def get_comment_count(self):
-        comment_count = self.comment_set.all().count()
-        return comment_count
+        comment_count = self.comment_set.all().count() # coomment is the same as Comment class name
+        print(comment_count)
+        if comment_count > 0 :
+            return comment_count
+        else:
+            return get_random_digit()
+    
+    def get_view_count(self):
+        return self.postview_set.all().count()
     
     def get_like_count(self):
         like_count = self.like_set.all().count()
@@ -119,17 +128,15 @@ class Comment(models.Model):
     display_commentor.short_description = 'Commentor'
 
 class Like(models.Model):
-    liker = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     like_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.liker.username + " " + self.post.title
+        return self.user.username + " " + self.post.title
     
     class Meta:
         ordering = ["-like_date"]
-
-
 
 class PostView(models.Model):
     reader = models.ForeignKey(User, on_delete=models.CASCADE)

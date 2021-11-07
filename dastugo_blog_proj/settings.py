@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     # my apps
     'dastugo_blog_app',
+    'dastugo_user_app',
+    
     
 ]
 
@@ -63,7 +65,7 @@ ROOT_URLCONF = 'dastugo_blog_proj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,9 +135,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
 #STATIC_ROOT = os.path.join(BASE_DIR, 'media')
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+#STATICFILES_DIRS = ( # we can put static files in the project level folder. but currently they are loacated in app level as above
+ #   os.path.join(BASE_DIR, 'static'),
+#)
 
 
 MEDIA_URL = '/media/'
