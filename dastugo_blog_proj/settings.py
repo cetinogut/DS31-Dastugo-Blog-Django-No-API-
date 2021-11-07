@@ -147,11 +147,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
-# LOGIN_REDIRECT_URL = '/catalog' # this works too
-LOGIN_REDIRECT_URL = '/'
 
+LOGIN_REDIRECT_URL = '/' # 
+#LOGIN_REDIRECT_URL = "dastugo_blog_app/post-list" # this sis not work 
+
+LOGIN_URL = "login" # default accounts/login
+
+# While developing you can use the lin ebelow to skip the actual email sending. it generates a confirmation link on the console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #The password reset system requires that your website supports email, which is beyond the scope of this article, so this part won't work yet. To allow testing, put the following line at the end of your settings.py file. This logs any emails sent to the console (so you can copy the password reset link from the console).
+
+# Sending email
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = config("EMAIL_USER")
+# EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
 
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

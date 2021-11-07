@@ -20,8 +20,33 @@ def post_list(request):
    template_name = 'dastugo_blog_app/post_list.html'
    paginate_by = 4 """
    
+def post_detail(request, slug):
+    form = CommentForm()
+    post_object = get_object_or_404(Post, slug=slug)
+    
+    if request.user.is_authenticated:
+        PostView.objects.create(reader=request.user, post=post_object)
+        like_qs = Like.objects.filter(user=request.user, post=post_object) # added here to access whether the user likd this post before. based on the result we show red heart in the template, if the user already liked it.
+    else:
+        like_qs =[]
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid:
+            comment = form.save(commit=False)
+            comment.commentor = request.user
+            comment.post = post_object
+            comment.save()
+            return redirect("dastugo_blog_app:post-detail", slug=slug) # affter commenting remain at the same page
+            # return redirect(request.path)
+    context = {
+        "post": post_object,
+        "like": like_qs, # to check if the user already liked the post
+        "form": form
+    }
+    
+    return render(request, "dastugo_blog_app/post_detail.html", context)
 
-#@login_required()
+@login_required()
 def post_create(request):
     form = PostForm()
     if request.method == "POST":
@@ -50,31 +75,7 @@ def post_create(request):
     fields = ['title', 'content', 'blogger', 'category', 'status', 'published_date', 'image']
     initial = {'published_date': '11/06/2020'} """
 
-def post_detail(request, slug):
-    
-    form = CommentForm()
-    post_object = get_object_or_404(Post, slug=slug)
-    like_qs = Like.objects.filter(user=request.user, post=post_object)
-    # if request.user.is_authenticated:
-    #     PostView.objects.create(user=request.user, post=obj)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid:
-            comment = form.save(commit=False)
-            comment.commentor = request.user
-            comment.post = post_object
-            comment.save()
-            return redirect("dastugo_blog_app:post-detail", slug=slug) # affter commenting remain at the same page
-            # return redirect(request.path)
-    context = {
-        "post": post_object,
-        "like": like_qs,
-        "form": form
-    }
-    
-    return render(request, "dastugo_blog_app/post_detail.html", context)
-
-#@login_required()
+@login_required()
 def post_update(request, slug):
     post_object = get_object_or_404(Post, slug=slug) # slug = "dogan-new-blog-good-sunday-ab1bd59c7c" instead of id use this slug to find our post
     form = PostForm(request.POST or None, request.FILES or None, instance=post_object) # instance is the one we are looking for. and we dont want to lose it.
@@ -92,7 +93,7 @@ def post_update(request, slug):
     }
     return render(request, "dastugo_blog_app/post_update.html", context)
 
-#@login_required()
+@login_required()
 def post_delete(request, slug):
     post_object = get_object_or_404(Post, slug=slug)
 
@@ -108,7 +109,7 @@ def post_delete(request, slug):
     }
     return render(request, "dastugo_blog_app/post_delete.html", context)
 
-#@login_required()
+@login_required()
 def like(request, slug):
     if request.method == "POST":
         obj = get_object_or_404(Post, slug=slug)
@@ -120,4 +121,4 @@ def like(request, slug):
             Like.objects.create(user=request.user, post=obj)
         return redirect('dastugo_blog_app:post-detail', slug=slug)
     
-    return redirect('dastugo_blog_app:post-detail', slug=slug)
+    return redirect('dastugo_blog_app:post-detail', slug=slug) # if it is a get then redirect to post-detail
