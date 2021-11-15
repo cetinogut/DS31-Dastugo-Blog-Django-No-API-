@@ -1,0 +1,193 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	
+	<title>Dastugo Blog {% block title %} {% endblock %}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<meta name="keywords" content="Weblog a Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+
+	<script>
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+	<link rel="stylesheet" href="{% static 'css/jquery.desoslide.css' %}">
+	<link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />
+	<link href="{% static 'css/fontawesome-all.css' %}" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800"
+	    rel="stylesheet">
+</head>
+
+<body>
+
+	<!--Header-->
+    {% include 'header_dastugo.html' %}
+    <!-- end header section -->
+		{% comment %} {% endcomment %}
+			<div class="container">
+				{% if messages %}
+					{% for message in messages %}
+					<div class="alert alert-{{message.tags}}">
+						{{message}}
+					</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+				
+	{% if current_url != 'about' and current_url != 'contact' and current_url != 'users/login'  %}
+		<!--/banner-->
+		<div class="banner">
+		{% include 'carousel_dastugo.html' %}
+		</div>
+		<!--//banner-->
+		<!--/bottom slider-->
+		
+		<!--/bottom slider-->
+	{% endif %}
+		{% comment %}{% include 'bottom_slider_dastugo.html' %} {% endcomment %}
+		
+		{% block bottom_slider %}
+	
+	 	{% endblock bottom_slider %}
+	 <!-- content  -->
+	 {% block content %}
+	 <!--/main-->
+	 <!--//main-->
+	 {% endblock content %}
+	 <!-- end content -->
+	
+	<!--/middle-->
+	<!--//middle çıkarttım-->
+	
+	<!--middle altı-->
+	<!--//middle altı main çıkarttım-->
+	
+	<!--footer-->
+    {% include 'footer_dastugo.html' %}
+    <!--end footer-->
+	<!---->
+	<!-- js -->
+	<script src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
+	<!-- //js -->
+	<!-- desoslide-JavaScript -->
+	<script src="{% static 'js/jquery.desoslide.js' %}"></script>
+	<script>
+		$('#demo1_thumbs').desoSlide({
+			main: {
+				container: '#demo1_main_image',
+				cssClass: 'img-responsive'
+			},
+			effect: 'sideFade',
+			caption: true
+		});
+	</script>
+
+	<!-- requried-jsfiles-for owl -->
+	<script>
+		$(window).load(function () {
+			$("#flexiselDemo1").flexisel({
+				visibleItems: 3,
+				animationSpeed: 1000,
+				autoPlay: true,
+				autoPlaySpeed: 3000,
+				pauseOnHover: true,
+				enableResponsiveBreakpoints: true,
+				responsiveBreakpoints: {
+					portrait: {
+						changePoint: 480,
+						visibleItems: 1
+					},
+					landscape: {
+						changePoint: 640,
+						visibleItems: 2
+					},
+					tablet: {
+						changePoint: 768,
+						visibleItems: 3
+					}
+				}
+			});
+
+		});
+	</script>
+	<script>
+		$(window).load(function () {
+			$("#flexiselDemo2").flexisel({
+				visibleItems: 3,
+				animationSpeed: 1000,
+				autoPlay: true,
+				autoPlaySpeed: 3000,
+				pauseOnHover: true,
+				enableResponsiveBreakpoints: true,
+				responsiveBreakpoints: {
+					portrait: {
+						changePoint: 480,
+						visibleItems: 1
+					},
+					landscape: {
+						changePoint: 640,
+						visibleItems: 2
+					},
+					tablet: {
+						changePoint: 768,
+						visibleItems: 3
+					}
+				}
+			});
+
+		});
+	</script>
+	<script src="{% static 'js/jquery.flexisel.js' %}"></script>
+	<!-- //password-script -->
+	<!--/ start-smoth-scrolling -->
+	<script src="{% static 'js/move-top.js' %}"></script>
+	<script src="{% static 'js/easing.js' %}"></script>
+	<script>
+		jQuery(document).ready(function ($) {
+			$(".scroll").click(function (event) {
+				event.preventDefault();
+				$('html,body').animate({
+					scrollTop: $(this.hash).offset().top
+				}, 900);
+			});
+		});
+	</script>
+	<!--// end-smoth-scrolling -->
+
+	<script>
+		$(document).ready(function () {
+			
+									var defaults = {
+							  			containerID: 'toTop', // fading element id
+										containerHoverID: 'toTopHover', // fading element hover id
+										scrollSpeed: 1200,
+										easingType: 'linear' 
+							 		};
+									
+
+			$().UItoTop({
+				easingType: 'easeOutQuart'
+			});
+
+		});
+	</script>
+	<a href="index.html" class="scroll" id="toTop" style="display: block;">
+		<span id="toTopHover" style="opacity: 1;"> </span>
+	</a>
+
+	<!-- //Custom-JavaScript-File-Links -->
+	<script src="{% static 'js/bootstrap.js' %}"></script>
+
+</body>
+
+</html>

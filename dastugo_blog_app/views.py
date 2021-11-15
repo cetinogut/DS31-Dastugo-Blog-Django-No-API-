@@ -15,6 +15,32 @@ def post_list(request):
     print(context)
     return render(request, "dastugo_blog_app/post_list.html", context)
 
+def home(request):
+    current_url = request.resolver_match.url_name
+    
+    print(current_url)
+    context = {
+        "current_url" : current_url
+    }
+    return render(request, "dastugo_blog_app/index.html", context)
+
+def about(request):
+    current_url = request.resolver_match.url_name
+    
+    print(current_url)
+    context = {
+        "current_url" : current_url
+    }
+    return render(request, "dastugo_blog_app/about.html", context)
+
+def contact(request):
+    current_url = request.resolver_match.url_name
+    print(current_url)
+    context = {
+        "current_url" : current_url
+    }
+    return render(request, "dastugo_blog_app/contact.html", context)
+
 """ class HomeView(generic.ListView): #this home page works as post list view
    model = Post
    template_name = 'dastugo_blog_app/post_list.html'

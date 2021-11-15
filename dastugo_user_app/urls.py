@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views # as a best practive we rena
 from .views import register, profile
 from .forms import PasswordResetEmailCheck
 
+
 urlpatterns = [
     path("register/", register, name="register"),
     path("profile/", profile, name="profile"),

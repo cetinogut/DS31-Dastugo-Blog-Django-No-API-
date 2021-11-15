@@ -94,7 +94,6 @@ class Post(models.Model):
     def comments(self):
         return self.comment_set.all()
 
-
 class Comment(models.Model):
     """
     Model representing a comment against a blog post.
@@ -145,3 +144,14 @@ class PostView(models.Model):
 
     def __str__(self):
         return self.reader.username + " " + self.post.title
+
+#in order to handle the contact form
+class Contact(models.Model):
+    name = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=250)
+    email = models.EmailField(max_length=254)
+    message = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name

@@ -150,7 +150,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 
 LOGIN_REDIRECT_URL = '/' # 
-#LOGIN_REDIRECT_URL = "dastugo_blog_app/post-list" # this sis not work 
+#LOGIN_REDIRECT_URL = "dastugo_blog_app/post-list" # this is not work 
 
 LOGIN_URL = "login" # default accounts/login
 
