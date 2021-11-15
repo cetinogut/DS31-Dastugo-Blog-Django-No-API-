@@ -135,7 +135,7 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #STATICFILES_DIRS = ( # we can put static files in the project level folder. but currently they are loacated in app level as above
  #   os.path.join(BASE_DIR, 'static'),
 #)

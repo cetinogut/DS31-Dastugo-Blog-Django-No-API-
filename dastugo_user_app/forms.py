@@ -6,7 +6,7 @@ from .models import Profile
 
 
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField() # now email fierld is required by default
+    email = forms.EmailField() # now email field is required by default
 
     class Meta:
         model = User
