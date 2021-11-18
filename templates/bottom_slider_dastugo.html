@@ -3,81 +3,33 @@
 <!--/bottom slider-->
 <section class="bottom-slider">
     <div class="course_demo1">
+        <h6 style="color:tomato">Latest 6 posts in the blog site</h6>
         <ul id="flexiselDemo1">
+            
+            {% if recent_post_list %}
+                            {% for post in recent_post_list %}
             <li>
                 <div class="blog-item">
-                    <img src="{% static 'images/1.jpg' %}" alt=" " class="img-fluid" />
+                    <img src="{{ post.image.url }}" alt=" " class="img-fluid" />
                     <button type="button" class="btn btn-primary play" data-toggle="modal" data-target="#exampleModal">
                         <i class="fas fa-play"></i>
                     </button>
 
                     <div class="floods-text">
-                        <h3>The fed and inequality
+                        <h3>{{post.title}}
                             <span>Blogger
                                 <label>|</label>
-                                <i>Adom Smith</i>
+                                <i>{{post.blogger}}</i>
                             </span>
                         </h3>
 
                     </div>
                 </div>
             </li>
-            <li>
-                <div class="blog-item">
-                    <img src="{% static 'images/2.jpg' %}" alt=" " class="img-fluid" />
-                    <button type="button" class="btn btn-primary play" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fas fa-play"></i>
-                    </button>
-
-                    <div class="floods-text">
-                        <h3>The fastest insect in the world
-                            <span>Blogger
-                                <label>|</label>
-                                <i>Adom Smith</i>
-                            </span>
-                        </h3>
-
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="blog-item">
-                    <img src="{% static 'images/3.jpg' %}" alt=" " class="img-fluid" />
-                    <button type="button" class="btn btn-primary play" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fas fa-play"></i>
-                    </button>
-
-
-                    <div class="floods-text">
-                        <h3>Billionaires versus Millionaires
-                            <span>Blogger
-                                <label>|</label>
-                                <i>Adom Smith</i>
-                            </span>
-                        </h3>
-
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="blog-item">
-                    <img src="{% static 'images/4.jpg' %}" alt=" " class="img-fluid" />
-                    <button type="button" class="btn btn-primary play" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fas fa-play"></i>
-                    </button>
-
-
-                    <div class="floods-text">
-                        <h3>Billionaires versus Millionaires
-                            <span>Blogger
-                                <label>|</label>
-                                <i>Adom Smith</i>
-                            </span>
-                        </h3>
-
-                    </div>
-                </div>
-            </li>
+            {% endfor %}
+            {% else %}
+                <p>There are no post available.</p>
+            {% endif %}
         </ul>
     </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">

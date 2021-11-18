@@ -8,7 +8,13 @@
                     <i class="fab fa-linode"></i> Dastugo Tech. Blog</a>
             </div>
             <div class="col-md-4 top-forms text-center mt-lg-3 mt-md-1 mt-0">
-                <span>Welcome Back!</span>
+                {% if user.is_authenticated %}
+                <span>Welcome Back! {{ user.get_username }}</span>
+                <span class="mx-lg-4 mx-md-2  mx-1">
+                    <a href="{% url 'logout' %}">
+                        <i class="fas fa-lock"></i> Logout</a>
+                </span>
+                {% else %}
                 <span class="mx-lg-4 mx-md-2  mx-1">
                     <a href="{% url 'login' %}">
                         <i class="fas fa-lock"></i> Sign In</a>
@@ -17,6 +23,7 @@
                     <a href="{% url 'register' %}">
                         <i class="far fa-user"></i> Register</a>
                 </span>
+                {% endif %}
             </div>
             <div class="col-md-4 log-icons text-right">
 
@@ -88,7 +95,7 @@
 
                     </ul>
                         <form action="#" method="post" class="form-inline my-2 my-lg-0 header-search">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search here..." name="Search" required="">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search here...(TODO)" name="Search" required="">
                             <button class="btn btn1 my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
                         </form>
     

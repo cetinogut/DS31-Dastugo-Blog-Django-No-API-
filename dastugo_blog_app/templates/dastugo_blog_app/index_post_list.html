@@ -1,0 +1,262 @@
+{% extends 'base_dastugo.html' %}
+
+{% load static %}
+
+{% block carousel %}
+    {% include 'carousel_dastugo.html' %}
+{% endblock carousel %}
+
+{% block bottom_slider %}
+    {% include 'bottom_slider_dastugo.html' %}
+{% endblock bottom_slider %}
+
+{% block content %}
+<section class="main-content-w3layouts-agileits">
+    <div class="container">
+        <div class="row">
+            <!--left-->
+            <div class="col-lg-8 left-blog-info-w3layouts-agileits text-left">
+                {% if last_post %}
+                <div class="blog-grid-top">
+                    <div class="b-grid-top">
+                        <div class="blog_info_left_grid">
+                            <h6 style="color:tomato">Latest posts in my blog</h6>
+                            <h1><a href="{% url 'dastugo_blog_app:post-detail' last_post.slug %}">{{last_post.title}} </a></h1>
+                            <a href="{% url 'dastugo_blog_app:post-detail' last_post.slug %}">
+                                <img src="{{ last_post.image.url }}" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="blog-info-middle">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-calendar-alt"></i> {{last_post.publish_date.date}}</a>
+                                </li>
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-thumbs-up"></i> {{last_post.get_like_count}} Likes</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-comment"></i> {{last_post.get_comment_count}} Comments</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <h3>
+                        <a href="single.html">{{last_post.title}} </a>
+                    </h3>
+                    <p>{{last_post.content|truncatechars:50}}</p>
+                    <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                </div>
+                {% else %}
+                    <p>There are no post available.</p>
+                {% endif %}
+                <!--//slider-->
+                <div class="blog-mid-sec">
+                    <h6 style="color:tomato">Latest posts in each category</h6>
+                    <ul id="flexiselDemo2">
+                        {% if latest_posts_on_each_category %}
+                            {% for post in latest_posts_on_each_category %}
+                        <li>
+                            <div class="blog-item">
+                                <img src="{{ post.image.url }}" alt=" " class="img-fluid" />
+                                <button type="button" class="btn btn-primary play sec" data-toggle="modal" data-target="#exampleModal">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="floods-text" >
+                                    <h4 style="color:yellowgreen;">{{post.title}} </h4>
+                                </div>
+                                <div class="floods-text" >
+                                    <h3 style="color: red;">{{post.display_category}} - {{post.blogger}} </h3>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                            <p>There are no posts available.</p>
+                        {% endif %}
+                       <!--  <li>
+                            <div class="blog-item">
+                                <img src="{% static 'images/6.jpg' %}" alt=" " class="img-fluid" />
+                                <button type="button" class="btn btn-primary play sec" data-toggle="modal" data-target="#exampleModal">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="floods-text">
+                                    <h3>Lorem ipsum </h3>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="blog-item">
+                                <img src="{% static 'images/7.jpg' %}" alt=" " class="img-fluid" />
+                                <button type="button" class="btn btn-primary play sec" data-toggle="modal" data-target="#exampleModal">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="floods-text">
+                                    <h3>Lorem ipsum </h3>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="blog-item">
+                                <img src="{% static 'images/8.jpg' %}" alt=" " class="img-fluid" />
+                                <button type="button" class="btn btn-primary play sec" data-toggle="modal" data-target="#exampleModal">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="floods-text">
+                                    <h3>Lorem ipsum </h3>
+                                </div>
+                            </div>
+                        </li> -->
+                    </ul>
+                </div>
+                <!--//slider-->
+
+                <div class="blog-girds-sec">
+                    
+                    <div class="row">
+                        <div class="col-md-6 blog-grid-top">
+                            <div class="b-grid-top">
+                                <h6 style="color:tomato">Most liked post</h6>
+                                <div class="blog_info_left_grid">
+                                    <a href="single.html">
+                                        <img src="{{ most_liked_post.image.url }}" class="img-fluid" alt="">
+                                    </a>
+                                </div>
+                                <h3>
+                                    <a href="single.html">{{most_liked_post.title}} </a>
+                                </h3>
+                                <p>{{most_liked_post.content|truncatechars:50}}</p>
+                                <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                            </div>
+                            <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_liked_post.publish_date|timesince }} ago.</a>                               </p>
+                            <ul class="blog-icons">
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-thumbs-up"></i> {{most_liked_post.get_like_count}} Likes</a>
+                                </li>
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-comment"></i> {{most_liked_post.get_comment_count}}</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fas fa-eye"></i> {{most_liked_post.get_view_count}}</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                        <div class="col-md-6 blog-grid-top">
+                            <div class="b-grid-top">
+                                <h6 style="color:tomato">Most read post</h6>
+                                <div class="blog_info_left_grid">
+                                    <a href="single.html">
+                                        <img src="{{ most_read_post.image.url }}" class="img-fluid" alt="">
+                                    </a>
+                                </div>
+                                <h3>
+                                    <a href="single.html">{{most_read_post.title}} </a>
+                                </h3>
+                                <p>{{most_read_post.content|truncatechars:50}}</p>
+                                <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                            </div>
+                            <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_read_post.publish_date|timesince }} ago.</a>                               </p>
+                            <ul class="blog-icons">
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-thumbs-up"></i> {{most_read_post.get_like_count}} Likes</a>
+                                </li>
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-comment"></i> {{most_read_post.get_comment_count}}</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fas fa-eye"></i> {{most_read_post.get_view_count}}</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--//left-->
+            <!--right-->
+            <aside class="col-lg-4 agileits-w3ls-right-blog-con text-right">
+                <div class="right-blog-info text-left">
+                    <div class="tech-btm">
+                        <img src="{% static 'images/banner1.jpg' %}" class="img-fluid" alt="">
+                    </div>
+                    <div class="tech-btm">
+                        <h4>Sign up to our newsletter</h4>
+                        <p>Pellentesque dui, non felis. Maecenas male </p>
+                        <form action="#" method="post">
+                            <input type="email" placeholder="Email" required="">
+                            <input type="submit" value="Subscribe">
+                        </form>
+
+                    </div>
+                    <div class="tech-btm widget_social">
+                        <h4>Stay Connect</h4>
+                        <ul>
+
+                            <li>
+                                <a class="twitter" href="#">
+                                    <i class="fab fa-twitter"></i>
+                                    <span class="count">317K</span> Twitter Followers</a>
+                            </li>
+                            <li>
+                                <a class="facebook" href="#">
+                                    <i class="fab fa-facebook-f"></i>
+                                    <span class="count">218k</span> Twitter Followers</a>
+                            </li>
+                            <li>
+                                <a class="dribble" href="#">
+                                    <i class="fab fa-dribbble"></i>
+
+                                    <span class="count">215k</span> Dribble Followers</a>
+                            </li>
+                            <li>
+                                <a class="pin" href="#">
+                                    <i class="fab fa-pinterest"></i>
+                                    <span class="count">190k</span> Pinterest Followers</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="tech-btm">
+                        <h4>Popular Posts</h4>
+                        {% if popular_posts %}
+                            {% for post in popular_posts %}
+                            <div class="blog-grids row mb-3">
+                                <div class="col-md-5 blog-grid-left">
+                                    <a href="single.html">
+                                        <img src="{{ post.image.url }}" class="img-fluid" alt="">
+                                    </a>
+                                </div>
+                                <div class="col-md-7 blog-grid-right">
+                                    <h5>
+                                        <a href="single.html">{{post.title}} </a>
+                                    </h5>
+                                    <div class="sub-meta">
+                                        <span>
+                                            <i class="far fa-clock"></i> {{post.publish_date.date}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>There are no post available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </aside>
+            <!--//right-->
+        </div>
+    </div>
+</section>
+
+{% endblock %}

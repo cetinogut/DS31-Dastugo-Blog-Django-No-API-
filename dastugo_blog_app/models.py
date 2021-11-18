@@ -48,15 +48,13 @@ class Post(models.Model):
     category = models.ManyToManyField(Category, help_text='Select  category(ies) for this post')
     
     class Meta:
-        ordering = ["-publish_date"]
+        ordering = ["-publish_date"] # the newest comes at the top of the list
         #ordering = ["-created_date"]
         #permissions = (("can_mark_archieved", "Set post status as archieved"),)
         
-    def get_absolute_url(self):
-        """
-        Returns the url to access a particular post instance.
-        """
-        return reverse('post-detail', args=[str(self.id)])
+    """ def get_absolute_url(self):
+        # Returns the url to access a particular post instance.
+        return reverse('post-detail', args=[str(self.id)]) """
     
     def __str__(self):
         return self.title
@@ -75,7 +73,7 @@ class Post(models.Model):
             return comment_count
         else:
             return get_random_digit()
-    
+    @property
     def get_view_count(self):
         return self.postview_set.all().count()
     
@@ -83,7 +81,7 @@ class Post(models.Model):
         like_count = self.like_set.all().count()
         return like_count
     
-    def post_preview(self):
+    def post_preview(self): ## did not used this one. used {{post.content|truncatechars:20}} instead..
         len_preview=200
         if len(self.content)>len_preview:
             preview_string=self.content[:len_preview] + '...'
@@ -93,6 +91,16 @@ class Post(models.Model):
 
     def comments(self):
         return self.comment_set.all()
+    
+    def categories(self):
+        return self.category_set.all()
+    
+    @property
+    def get_last_blog_post(self): ## did not used this one. instaed used the one in the view.
+        last_blog_post = self.post_set.order_by('-publish_date').first()
+        if last_blog_post:
+            return last_blog_post
+        return self
 
 class Comment(models.Model):
     """

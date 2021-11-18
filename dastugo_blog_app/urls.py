@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, about, contact, post_detail, post_list, post_create, post_update, post_delete, like  
+from .views import home,index_post_list, about, contact, post_detail, post_list, post_create, post_update, post_delete, like  
 #from .views import HomeView, PostCreate
 
 
@@ -7,7 +7,8 @@ app_name = "dastugo_blog_app" # if we have more than one apps to have a better r
 urlpatterns = [
     #path('', HomeView.as_view(), name='post-list'),
     path("", post_list, name="post-list"),
-    path("index/", home, name="home"),
+    #path("index/", home, name="home"),
+    path("index/", index_post_list, name="home"),
     path("about/", about, name="about"),
     path("contact/", contact, name="contact"),
     path("create/", post_create, name="post-create"),

@@ -1,70 +1,350 @@
-{% extends 'base.html' %}
+{% extends 'base_dastugo.html' %}
 {% load crispy_forms_tags %}
 
+{% load static %}
+
 {% block content %}
+<style>
+    .button-like{
+        cursor:pointer;
+         background-color: blanchedalmond;
+          border: none;
+    }
+</style>
+<!--/main-->
+<section class="main-content-w3layouts-agileits">
+    <div class="container">
+        <h3 class="tittle">Read Full Blog Post</h3>
+        <div class="row inner-sec">
+            <!--left-->
+            <div class="col-lg-8 left-blog-info-w3layouts-agileits text-left">
+                <article class="blog-grid-top">
+                    <div class="b-grid-top">
+                        <div class="blog_info_left_grid">
+                            <a href="#">
+                                <img src="{{ post.image.url }}" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="blog-info-middle">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-calendar-alt"></i> {{ post.publish_date.date }}</a>
+                                </li>
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-thumbs-up"></i> {{post.get_like_count}} Likes</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-comment"></i>{{post.get_comment_count}} Comments</a>
+                                </li>
 
-<div class="container card" style="width: 40rem;">
-    <img src="{{ post.image.url }}" class="card-img-top" alt="post_image">
-    <div class="card-body">
-        <h2 class="card-title">{{ post.title }}</h2>
-        <hr>
-        <div>
-            <span><i class="far fa-comment-alt ml-2"></i> {{ post.get_comment_count }}</span>
-            <span><i class="fas fa-eye ml-2"></i> 7</span>
-            <span><i class="far fa-heart ml-2"></i> {{ post.get_like_count }}</span>
-            <span class="float-right"> <small>Posted {{ post.publish_date|timesince }} ago.</small> </span>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>
+                        <a href="#">{{ post.title }} </a>
+                    </h3>
+                    <p>{{ post.content }}r</p>
+                    
+                    <div class="row">
+                        <p>Enjoy this post? Give it a LIKE!!</p>
+                        <form action="{% url 'dastugo_blog_app:like' post.slug %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="post">
+                            <input type="hidden" name="user">
+                            {% if like %}
+                            <button type="submit" class="button-like ml-5" ><i class="fas fa-heart fa-lg" style="color:tomato; border: none;"></i></button>
+                            {%else%}
+                            <button type="submit" class="button-like ml-5"><i class="far fa-heart fa-lg"></i></button>
+                            {%endif%}
+                            {{post.get_like_count}}
+                        </form>
+                    </div>
+                </article>
+                        <div>
+                         {% if user.is_authenticated %}
+                         <h4>Comments</h4>
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <button class="btn btn-secondary btn-sm mt-1 mb-1">SEND</button>
+                        </form>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-block">Login to comment</a>
+                        {% endif %}
+                        <hr>
+                        {% for comment in post.comments %}
+                        <div>
+                            <p>
+                                <small><b>Comment by {{comment.commentor.username}}</b></small> - <small>{{ comment.comment_date|timesince }} ago.
+                                </small>
+                            </p>
+                            <p>
+                                {{ comment.content }}
+                            </p>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                        
+                       
+                        </div>
+                <h4 style="color:tomato">Similar posts</h4>
+                <h6 style="color:rgb(224, 224, 16)">~TODO~</h6>
+                <article class="blog-grid-top my-5">
+                    <div class="b-grid-top">
+                        <div class="blog_info_left_grid">
+                            <a href="single.html">
+                                <img src="images/b4.jpg" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="blog-info-middle">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-calendar-alt"></i> FEB 15,2018</a>
+                                </li>
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-thumbs-up"></i> 201 Likes</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-comment"></i> 15 Comments</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>
+                        <a href="single.html">Amet consectetur adipisicing </a>
+                    </h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sedc dnmo eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua uta enim ad minim ven iam quis nostrud exercitation ullamco labor nisi ut aliquip exea commodo consequat duis
+                        aute irudre dolor in elit sed uta labore dolore reprehender</p>
+                    <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                </article>
+                <article class="blog-grid-top mb-4">
+                    <div class="b-grid-top">
+                        <div class="blog_info_left_grid">
+                            <a href="single.html">
+                                <img src="images/b1.jpg" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="blog-info-middle">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-calendar-alt"></i> FEB 15,2018</a>
+                                </li>
+                                <li class="mx-2">
+                                    <a href="#">
+                                        <i class="far fa-thumbs-up"></i> 201 Likes</a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="far fa-comment"></i> 15 Comments</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>
+                        <a href="single.html">Amet consectetur adipisicing </a>
+                    </h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sedc dnmo eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua uta enim ad minim ven iam quis nostrud exercitation ullamco labor nisi ut aliquip exea commodo consequat duis
+                        aute irudre dolor in elit sed uta labore dolore reprehender</p>
+                    <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                </article>
+                <nav aria-label="Page navigation example">
+                    <h6 style="color:rgb(224, 224, 16)">~TODO~</h6>
+                    <ul class="pagination justify-content-left">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!--//left-->
+            <!--right-->
+            <aside class="col-lg-4 agileits-w3ls-right-blog-con text-left">
+                <div class="right-blog-info text-left">
+                    <div class="tech-btm">
+                        <img src="images/banner1.jpg" class="img-fluid" alt="">
+                    </div>
+                    <div class="tech-btm">
+                        <h4>Sign up to our newsletter</h4>
+                        <h6 style="color:rgb(224, 224, 16)">~TODO~</h6>
+                        <p>Pellentesque dui, non felis. Maecenas male </p>
+                        <form action="#" method="post">
+                            <input type="email" placeholder="Email" required="">
+                            <input type="submit" value="Subscribe">
+                        </form>
+
+                    </div>
+                    <div class="tech-btm">
+                        <h4>Categories</h4>
+                        {% if post_numbers_in_each_category  %}
+                        {% for category in post_numbers_in_each_category %}
+                        <ul class="list-group single">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{category.name}}
+                                <span class="badge badge-primary badge-pill"> {{category.nblog}}</span>
+                            </li>
+                        {% endfor %}
+                        {% else %}
+                            <p>There are no categories available.</p>
+                        {% endif %}
+                        </ul>
+                    </div>
+                    <div class="tech-btm">
+                        
+                        <h4>Top stories of the week</h4>
+                        <h6 style="color:rgb(224, 224, 16)">~TODO query Error~</h6>
+                        {% if popular_posts_last_week  %}
+                        {% for post in popular_posts_last_week %}
+                        <div class="blog-grids row mb-3">
+                            <div class="col-md-5 blog-grid-left">
+                                <a href="{% url 'dastugo_blog_app:post-detail' post.slug %}">
+                                    <img src="{{ post.image.url }}" class="img-fluid" alt="">
+                                </a>
+                            </div>
+                            <div class="col-md-7 blog-grid-right">
+
+                                <h5>
+                                    <a href="{% url 'dastugo_blog_app:post-detail' post.slug %}">{{ post.title }} </a>
+                                </h5>
+                                <div class="sub-meta">
+                                    <span>
+                                        <i class="far fa-clock"></i> 20 Jan, 2018</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                            <p>There is no post available.</p>
+                        {% endif %}
+                    </div>
+                    <div class="single-gd my-5 tech-btm">
+                        <h4>Our Progress</h4>
+                        <h6 style="color:rgb(224, 224, 16)">~TODO~</h6>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="single-gd tech-btm text-left">
+                        <h4>Latest Post</h4>
+                        <div class="blog-grids">
+                            <div class="blog-grid-left">
+                                <a href="{% url 'dastugo_blog_app:post-detail' last_post.slug %}">
+                                    <img src="{{ last_post.image.url }}" class="img-fluid" alt="">
+                                </a>
+                            </div>
+                            <div class="blog-grid-right">
+
+                                <h5>
+                                    <a href="{% url 'dastugo_blog_app:post-detail' last_post.slug %}">{{last_post.title}}</a>
+                                </h5>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="tech-btm widget_social text-left">
+                        <h4>Stay Connect</h4>
+                        <h6 style="color:rgb(224, 224, 16)">~TODO~</h6>
+                        <ul>
+
+                            <li>
+                                <a class="twitter" href="#">
+                                    <i class="fab fa-twitter"></i>
+                                    <span class="count">317K</span> Twitter Followers</a>
+                            </li>
+                            <li>
+                                <a class="facebook" href="#">
+                                    <i class="fab fa-facebook-f"></i>
+                                    <span class="count">218k</span> Twitter Followers</a>
+                            </li>
+                            <li>
+                                <a class="dribble" href="#">
+                                    <i class="fab fa-dribbble"></i>
+
+                                    <span class="count">215k</span> Dribble Followers</a>
+                            </li>
+                            <li>
+                                <a class="pin" href="#">
+                                    <i class="fab fa-pinterest"></i>
+                                    <span class="count">190k</span> Pinterest Followers</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="tech-btm">
+                        <h4>Recent Posts</h4>
+
+                        {% if recent_post_list %}
+                            {% for post in recent_post_list %}
+                            <div class="blog-grids row mb-3">
+                                <div class="col-md-5 blog-grid-left">
+                                    <a href="{% url 'dastugo_blog_app:post-detail' post.slug %}">
+                                        <img src="{{ post.image.url }}" class="img-fluid" alt="">
+                                    </a>
+                                </div>
+                                <div class="col-md-7 blog-grid-right">
+                                    <h5>
+                                        <a href="{% url 'dastugo_blog_app:post-detail' post.slug %}">{{post.title}} </a>
+                                    </h5>
+                                    <div class="sub-meta">
+                                        <span>
+                                            <i class="far fa-clock"></i> {{post.publish_date.date}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>There are no post available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </aside>
+            <!--//right-->
         </div>
-        <hr>
-        <p class="card-text">{{ post.content }}.</p>
-        <hr>
-        <div>
-            <h4>Enjoy this post? Give it a LIKE!!</h4>
-            <form action="{% url 'dastugo_blog_app:like' post.slug %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="post">
-                <input type="hidden" name="user">
-                {% if like %}
-                <button type="submit"><i class="fas fa-heart fa-lg" style="color:tomato"></i></button>
-                {%else%}
-                <button type="submit"><i class="far fa-heart fa-lg"></i></button>
-                {%endif%}
-                {{post.get_like_count}}
-            </form>
-        </div>
-        <div>
-            
-            <hr>
-         <!-- {% if user.is_authenticated %} -->
-        <form action="" method="POST">
-            {% csrf_token %}
-            {{ form | crispy }}
-            <button class="btn btn-secondary btn-sm mt-1 mb-1">SEND</button>
-        </form>
-        <hr>
-        <h4>Comments</h4>
-        {% for comment in post.comments %}
-        <div>
-            <p>
-                <small><b>Comment by {{comment.commentor.username}}</b></small> - <small>{{ comment.comment_date|timesince }} ago.
-                </small>
-            </p>
-            <p>
-                {{ comment.content }}
-            </p>
-        </div>
-        <hr>
-        {% endfor %}
-        <!-- {% else %} -->
-            <!-- <a href="#" class="btn btn-primary btn-block">Login to comment</a> -->
-            <!-- {% endif %} -->
-       
     </div>
-</div>
+</section>
+<!--//main-->
 
-<div class="m-3">
-    {% if user.id == post.blogger.id %}
-    <a href="{% url 'dastugo_blog_app:post-update' post.slug %}" class="btn btn-info">Edit</a>
-    <a href="{% url 'dastugo_blog_app:post-delete' post.slug %}" class="btn btn-danger">Delete</a>
-    {% endif %}
-</div>
-{% endblock content %}
+{% endblock %}

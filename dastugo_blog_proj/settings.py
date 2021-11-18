@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3rd party apps,
     'crispy_forms',
+    'storages' ,
     # my apps
     'dastugo_blog_app',
     'dastugo_user_app',
@@ -134,22 +135,35 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-#STATICFILES_DIRS = ( # we can put static files in the project level folder. but currently they are loacated in app level as above
- #   os.path.join(BASE_DIR, 'static'),
-#)
 
+## https://stackabuse.com/serving-static-files-in-python-with-django-aws-s3-and-whitenoise/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = ( # we can put static files in the project level folder. but currently they are loacated in app level as above
+    os.path.join(BASE_DIR, 'static'),
+)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #create these folders at project level as /media/avatar_pics
 
+# aws settings
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = 'us-east-2'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 
-LOGIN_REDIRECT_URL = '/' # 
+#LOGIN_REDIRECT_URL = '/' # 
+LOGIN_REDIRECT_URL = '/index' # 
 #LOGIN_REDIRECT_URL = "dastugo_blog_app/post-list" # this is not work 
 
 LOGIN_URL = "login" # default accounts/login

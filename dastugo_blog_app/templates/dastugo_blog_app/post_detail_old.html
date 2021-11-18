@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container card" style="width: 40rem;">
+    <img src="{{ post.image.url }}" class="card-img-top" alt="post_image">
+    <div class="card-body">
+        <h2 class="card-title">{{ post.title }}</h2>
+        <hr>
+        <div>
+            <span><i class="far fa-comment-alt ml-2"></i> {{ post.get_comment_count }}</span>
+            <span><i class="fas fa-eye ml-2"></i> 7</span>
+            <span><i class="far fa-heart ml-2"></i> {{ post.get_like_count }}</span>
+            <span class="float-right"> <small>Posted {{ post.publish_date|timesince }} ago.</small> </span>
+        </div>
+        <hr>
+        <p class="card-text">{{ post.content }}.</p>
+        <hr>
+        <div>
+            <h4>Enjoy this post? Give it a LIKE!!</h4>
+            <form action="{% url 'dastugo_blog_app:like' post.slug %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="post">
+                <input type="hidden" name="user">
+                {% if like %}
+                <button type="submit"><i class="fas fa-heart fa-lg" style="color:tomato"></i></button>
+                {%else%}
+                <button type="submit"><i class="far fa-heart fa-lg"></i></button>
+                {%endif%}
+                {{post.get_like_count}}
+            </form>
+        </div>
+        <div>
+            
+            <hr>
+         <!-- {% if user.is_authenticated %} -->
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <button class="btn btn-secondary btn-sm mt-1 mb-1">SEND</button>
+        </form>
+        <hr>
+        <h4>Comments</h4>
+        {% for comment in post.comments %}
+        <div>
+            <p>
+                <small><b>Comment by {{comment.commentor.username}}</b></small> - <small>{{ comment.comment_date|timesince }} ago.
+                </small>
+            </p>
+            <p>
+                {{ comment.content }}
+            </p>
+        </div>
+        <hr>
+        {% endfor %}
+        <!-- {% else %} -->
+            <!-- <a href="#" class="btn btn-primary btn-block">Login to comment</a> -->
+            <!-- {% endif %} -->
+       
+    </div>
+</div>
+
+<div class="m-3">
+    {% if user.id == post.blogger.id %}
+    <a href="{% url 'dastugo_blog_app:post-update' post.slug %}" class="btn btn-info">Edit</a>
+    <a href="{% url 'dastugo_blog_app:post-delete' post.slug %}" class="btn btn-danger">Delete</a>
+    {% endif %}
+</div>
+{% endblock content %}
