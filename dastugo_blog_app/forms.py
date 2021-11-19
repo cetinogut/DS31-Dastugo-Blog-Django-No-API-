@@ -9,15 +9,16 @@ class PostForm(forms.ModelForm):
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(),
                                               widget=forms.CheckboxSelectMultiple,
                                               help_text="Choose one or more category") # use all available categories
-
+ 
     class Meta:
         model = Post
         fields = (
             'title',
-            'image',
             'category',
+            'image',
             'content',
             'status',
+            'publish_date',
         )
 
 class CommentForm(forms.ModelForm):

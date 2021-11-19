@@ -3,6 +3,8 @@ from .models import Post, Like, PostView, Category
 from django.views import generic # imports all generic including  ListView , DetailView
 from .forms import CommentForm, PostForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib import messages
 from django.views import generic # imports all generic including  ListView , DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -250,3 +252,12 @@ class PostDetailView(generic.DetailView): #not used currently, just a sample cka
         'popular_posts': Post.objects.order_by('-get_view_count')[:5],
         })
         return context
+    
+class PostsByBloggerListView(LoginRequiredMixin, generic.ListView):
+    """Generic class-based view listing books on loan to current user."""
+    model = Post
+    template_name ='dastugo_blog_app/post_list_by_blogger.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.filter(blogger=self.request.user).filter(status__exact='p').order_by('publish_date')

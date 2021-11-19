@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import home,index_post_list, about, contact,underconst, post_detail, post_list, post_create, post_update, post_delete, like  
 #from .views import HomeView, PostCreate
+from . import views
 
 
 app_name = "dastugo_blog_app" # if we have more than one apps to have a better routing we wil luse the app name before the route.
@@ -13,11 +14,16 @@ urlpatterns = [
     path("contact/", contact, name="contact"),
     path("underconst/", underconst, name="underconst"),
     path("create/", post_create, name="post-create"),
+    path('myposts/', views.PostsByBloggerListView.as_view(), name='my-posts'),
     #path("create/", PostCreate.as_view(), name="post-create"),
     path("<str:slug>/", post_detail, name="post-detail"),
     path("update/<str:slug>/", post_update, name="post-update"),
     path("delete/<str:slug>/", post_delete, name="post-delete"),
     path("like/<str:slug>/", like, name="like"),
-    
-    
 ]
+
+
+""" urlpatterns += [
+    path('myposts/', views.PostsByBloggerListView.as_view(), name='my-posts'),
+    #path(r'borrowed/', views.AllLoanedBooksForLibrarianListView.as_view(), name='all-borrowed-books'),  # Added for challenge
+] """

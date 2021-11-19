@@ -3,13 +3,23 @@
 <header>
     <div class="top-bar_sub_w3layouts container-fluid">
         <div class="row">
-            <div class="col-md-4 logo text-left">
+            <div class="col-md-3 logo text-left">
                 <a class="navbar-brand" href="{% url 'dastugo_blog_app:home' %}">
                     <i class="fab fa-linode"></i> Dastugo Tech. Blog</a>
             </div>
-            <div class="col-md-4 top-forms text-center mt-lg-3 mt-md-1 mt-0">
+            <div class="col-md-5 top-forms text-center mt-lg-3 mt-md-1 mt-0">
                 {% if user.is_authenticated %}
                 <span>Welcome Back! {{ user.get_username }}</span>
+                <span class="mx-lg-4 mx-md-2  mx-1">
+                    <a href="{% url 'dastugo_blog_app:post-create' %}">
+                        <i class="fas fa-plus"></i> New Post</a>
+                </span>
+
+                <span class="mx-lg-4 mx-md-2  mx-1">
+                    <a href="{% url 'dastugo_blog_app:my-posts' %}">
+                        <i class="fas fa-list"></i> My Posts</a>
+                </span>
+                
                 <span class="mx-lg-4 mx-md-2  mx-1">
                     <a href="{% url 'logout' %}">
                         <i class="fas fa-lock"></i> Logout</a>

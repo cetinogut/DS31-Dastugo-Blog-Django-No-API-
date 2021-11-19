@@ -17,6 +17,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -111,8 +112,8 @@ class Comment(models.Model):
     comment_date = models.DateTimeField(auto_now_add=True)
     content = models.TextField(max_length=1000, help_text="Enter comment about blog here.")
 
-    def __str__(self):
-        return self.user.username
+    """ def __str__(self):
+        return self.user.username + ": comments on " + self.post.title """
     
     class Meta:
         ordering = ["-comment_date"]
@@ -126,7 +127,7 @@ class Comment(models.Model):
             titlestring=self.content[:len_title] + '...'
         else:
             titlestring=self.content
-        return (f"{self.commentor} - {titlestring} ")
+        return (f"{self.commentor} comments on {titlestring} ")
     
     def display_commentor(self):
         """Create a string for the Commentor user. This is required to display Comments in Admin."""
@@ -140,7 +141,7 @@ class Like(models.Model):
     like_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user.username + " " + self.post.title
+        return self.user.username + ": likes " + self.post.title
     
     class Meta:
         ordering = ["-like_date"]
