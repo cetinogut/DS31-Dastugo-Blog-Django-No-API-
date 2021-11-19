@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <h3>
-                        <a href="single.html">{{last_post.title}} </a>
+                        <a href="{% url 'dastugo_blog_app:post-detail' last_post.slug %}">{{last_post.title}} </a>
                     </h3>
                     <p>{{last_post.content|truncatechars:50}}</p>
                     <a href="single.html" class="btn btn-primary read-m">Read More</a>
