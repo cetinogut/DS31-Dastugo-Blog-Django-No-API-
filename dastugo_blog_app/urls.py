@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home,index_post_list, about, contact, post_detail, post_list, post_create, post_update, post_delete, like  
+from .views import home,index_post_list, about, contact,underconst, post_detail, post_list, post_create, post_update, post_delete, like  
 #from .views import HomeView, PostCreate
 
 
@@ -11,6 +11,7 @@ urlpatterns = [
     path("index/", index_post_list, name="home"),
     path("about/", about, name="about"),
     path("contact/", contact, name="contact"),
+    path("underconst/", underconst, name="underconst"),
     path("create/", post_create, name="post-create"),
     #path("create/", PostCreate.as_view(), name="post-create"),
     path("<str:slug>/", post_detail, name="post-detail"),

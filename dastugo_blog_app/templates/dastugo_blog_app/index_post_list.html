@@ -48,7 +48,7 @@
                         <a href="{% url 'dastugo_blog_app:post-detail' last_post.slug %}">{{last_post.title}} </a>
                     </h3>
                     <p>{{last_post.content|truncatechars:50}}</p>
-                    <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                    <a href="{% url 'dastugo_blog_app:underconst' %}" class="btn btn-primary read-m">Read More</a>
                 </div>
                 {% else %}
                     <p>There are no post available.</p>
@@ -121,15 +121,15 @@
                             <div class="b-grid-top">
                                 <h6 style="color:tomato">Most liked post</h6>
                                 <div class="blog_info_left_grid">
-                                    <a href="single.html">
+                                    <a href="{% url 'dastugo_blog_app:underconst' %}">
                                         <img src="{{ most_liked_post.image.url }}" class="img-fluid" alt="">
                                     </a>
                                 </div>
                                 <h3>
-                                    <a href="single.html">{{most_liked_post.title}} </a>
+                                    <a href="{% url 'dastugo_blog_app:underconst' %}">{{most_liked_post.title}} </a>
                                 </h3>
                                 <p>{{most_liked_post.content|truncatechars:50}}</p>
-                                <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                                <a href="{% url 'dastugo_blog_app:underconst' %}" class="btn btn-primary read-m">Read More</a>
                             </div>
                             <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_liked_post.publish_date|timesince }} ago.</a>                               </p>
                             <ul class="blog-icons">
@@ -152,15 +152,15 @@
                             <div class="b-grid-top">
                                 <h6 style="color:tomato">Most read post</h6>
                                 <div class="blog_info_left_grid">
-                                    <a href="single.html">
+                                    <a href="{% url 'dastugo_blog_app:underconst' %}">
                                         <img src="{{ most_read_post.image.url }}" class="img-fluid" alt="">
                                     </a>
                                 </div>
                                 <h3>
-                                    <a href="single.html">{{most_read_post.title}} </a>
+                                    <a href="{% url 'dastugo_blog_app:underconst' %}">{{most_read_post.title}} </a>
                                 </h3>
                                 <p>{{most_read_post.content|truncatechars:50}}</p>
-                                <a href="single.html" class="btn btn-primary read-m">Read More</a>
+                                <a href="{% url 'dastugo_blog_app:underconst' %}" class="btn btn-primary read-m">Read More</a>
                             </div>
                             <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_read_post.publish_date|timesince }} ago.</a>                               </p>
                             <ul class="blog-icons">
@@ -232,13 +232,13 @@
                             {% for post in popular_posts %}
                             <div class="blog-grids row mb-3">
                                 <div class="col-md-5 blog-grid-left">
-                                    <a href="single.html">
+                                    <a href="{% url 'dastugo_blog_app:underconst' %}">
                                         <img src="{{ post.image.url }}" class="img-fluid" alt="">
                                     </a>
                                 </div>
                                 <div class="col-md-7 blog-grid-right">
                                     <h5>
-                                        <a href="single.html">{{post.title}} </a>
+                                        <a href="{% url 'dastugo_blog_app:underconst' %}">{{post.title}} </a>
                                     </h5>
                                     <div class="sub-meta">
                                         <span>

@@ -101,6 +101,10 @@ def contact(request):
     } """
     return render(request, "dastugo_blog_app/contact.html")
 
+def underconst(request):
+    
+    return render(request, "dastugo_blog_app/underconst.html")
+
 #@login_required()
 def post_detail(request, slug):
     form = CommentForm()
