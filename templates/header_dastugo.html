@@ -10,16 +10,17 @@
             <div class="col-md-5 top-forms text-center mt-lg-3 mt-md-1 mt-0">
                 {% if user.is_authenticated %}
                 <span>Welcome Back! {{ user.get_username }}</span>
+                {% if user.is_staff %}
                 <span class="mx-lg-4 mx-md-2  mx-1">
                     <a href="{% url 'dastugo_blog_app:post-create' %}">
                         <i class="fas fa-plus"></i> New Post</a>
                 </span>
-
                 <span class="mx-lg-4 mx-md-2  mx-1">
                     <a href="{% url 'dastugo_blog_app:my-posts' %}">
                         <i class="fas fa-list"></i> My Posts</a>
                 </span>
-                
+
+                {% endif %}
                 <span class="mx-lg-4 mx-md-2  mx-1">
                     <a href="{% url 'logout' %}">
                         <i class="fas fa-lock"></i> Logout</a>

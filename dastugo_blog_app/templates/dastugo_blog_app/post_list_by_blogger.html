@@ -15,9 +15,9 @@
                     <h5 class="card-title"><a href="{% url 'dastugo_blog_app:post-detail' post.slug %}">{{post.title}}</a></h5>
                     <p class="card-text">{{post.content|truncatechars:20}}</p>
                     <p>
-                     <!--    <span><i class="far fa-comment-alt ml-2"></i> {{post.get_comment_count}} </span>
+                        <span><i class="far fa-comment-alt ml-2"></i> {{post.get_comment_count}} </span>
                         <span><i class="fas fa-eye ml-2"></i>9 </span>
-                        <span><i class="far fa-heart ml-2"></i>{{post.get_like_count}}</span> -->
+                        <span><i class="far fa-heart ml-2"></i>{{post.get_like_count}}</span>
                     <p class="card-text"><small>
                             Posted {{ post.publish_date|timesince }} ago.
                         </small>
