@@ -1,9 +1,9 @@
 from django.db import models
 from datetime import date, datetime
 from django.urls import reverse #Used to generate URLs by reversing the URL patterns
-from django.contrib.auth.models import User #Blog author or commenter
-from .utils import get_random_digit # to generate a randon one digit number for comment, like view count at the initial stage
-
+from django.contrib.auth.models import User #Blog author or commentor
+from .utils import get_random_digit # to generate a randon one digit number for comment, like view count at the initial stage, 
+from django.utils import timezone #to mark the blog posts with timestamp
 
 def user_directory_path(instance, filename): # creates a folder named after blogger id in media folder for user uploaded images
     return 'blog_pics/{0}/{1}'.format(instance.blogger.id, filename)
@@ -28,16 +28,20 @@ class Post(models.Model):
     """
     STATUS = (
         ('d',"Draft"),
-        ('p',"Publish"),
+        ('p',"Published"),
         ('a',"Archieved")
     )
     
+    class PublishedPostsManager(models.Manager): # a custom model manager to list only published posts
+        def get_queryset(self):
+            return super().get_queryset() .filter(status='Published')
+        
     title = models.CharField(max_length=200)
-    blogger = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    blogger = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='blog_posts')
     # Foreign Key used because post can only have one author/User, but bloggsers can have multiple posts.
     content = models.TextField(max_length=10000, help_text="Enter you blog text here.")
-    
-    publish_date = models.DateTimeField(blank=True, default=datetime.now())
+    summary = models.TextField(null=True)
+    published_date = models.DateTimeField(blank=True, default=timezone.now())
     created_date = models.DateTimeField(auto_now_add = True)
     updated_date = models.DateTimeField(auto_now = True)
     slug = models.SlugField(max_length=200, unique=True, blank=True) # how-to-learn-django
@@ -47,9 +51,11 @@ class Post(models.Model):
     # ManyToManyField used because a category can contain many posts. Posts can cover many categories.
     # Category class has already been defined so we can specify the object below.
     category = models.ManyToManyField(Category, help_text='Select  category(ies) for this post')
+    objects = models.Manager()  # default manager
+    posted_objects = PublishedPostsManager()  # custom manager
     
     class Meta:
-        ordering = ["-publish_date"] # the newest comes at the top of the list
+        ordering = ["-published_date"] # the newest comes at the top of the list
         #ordering = ["-created_date"]
         #permissions = (("can_mark_archieved", "Set post status as archieved"),)
         
@@ -98,7 +104,7 @@ class Post(models.Model):
     
     @property
     def get_last_blog_post(self): ## did not used this one. instaed used the one in the view.
-        last_blog_post = self.post_set.order_by('-publish_date').first()
+        last_blog_post = self.post_set.order_by('-published_date').first()
         if last_blog_post:
             return last_blog_post
         return self

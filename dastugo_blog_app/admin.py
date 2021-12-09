@@ -24,7 +24,7 @@ class LikesInline(admin.TabularInline): # this is for listing  of likes of a pos
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'blogger', 'display_category') # listing all posts format in admin site
-    list_filter = ('status', 'publish_date') # listing all posts, filtering in admin site
+    list_filter = ('status', 'published_date') # listing all posts, filtering in admin site
     inlines = [CommentsInline]
     #inlines = [LikesInline] # to list both inlines see https://stackoverflow.com/questions/62711269/multiple-inlines-in-model-admin-in-django
     fieldsets = ( # this for post detail and update view in admin site
@@ -32,10 +32,10 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('title', 'blogger', 'category', 'slug')
         }),
         ('Content&Image', { # section title in admin site
-            'fields': ('content', 'image' )
+            'fields': ('summary', 'content', 'image' )
         }),
         ('Publish Info:', {
-            'fields': ('status', 'publish_date')
+            'fields': ('status', 'published_date')
         }),
     )
     

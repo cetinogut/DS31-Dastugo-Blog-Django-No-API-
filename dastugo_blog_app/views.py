@@ -11,6 +11,12 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.db.models import Count
 from datetime import datetime, date, timedelta
 
+# initial test - class-based view 
+""" class HomeView(generic.ListView): #this home page works as post list view
+   model = Post
+   template_name = 'dastugo_blog_app/post_list.html'
+   paginate_by = 4 """
+   
 # functional views for training
 def home(request):
     current_url = request.resolver_match.url_name
@@ -32,8 +38,8 @@ def post_list(request): # this is for a table list in a staff view.. in the old 
 
 def index_post_list(request): # this is for the complex index page of the weblog
     posts = Post.objects.filter(status='p') # bring the published posts
-    recent_post_list = Post.objects.all().order_by('-publish_date')[:6] # first six posts in the slider
-    last_post = Post.objects.first() #since reverse ordered based on publish date, first birings the latest post
+    recent_post_list = Post.objects.all().order_by('-published_date')[:6] # first six posts in the slider
+    last_post = Post.objects.first() #since reverse ordered based on published date, first birings the latest post
     category_list = Category.objects.all()
     
     # a list of latest post in each category
@@ -104,7 +110,6 @@ def contact(request):
     return render(request, "dastugo_blog_app/contact.html")
 
 def underconst(request):
-    
     return render(request, "dastugo_blog_app/underconst.html")
 
 #@login_required()
@@ -113,15 +118,15 @@ def post_detail(request, slug):
     post_object = get_object_or_404(Post, slug=slug)
     
     #data tobe sent via context to detail page ## need refactoring for the left side. it an be moved to to base_dastugo.html
-    posts = Post.objects.filter(status='p').order_by('-publish_date') # bring the published posts
-    recent_post_list = posts.order_by('-publish_date')[1:6] # latest 5 posts excluding the last one. Because it is already  posted above
-    last_post = posts.first() #since reverse ordered based on publish date, first birings the latest post
+    posts = Post.objects.filter(status='p').order_by('-published_date') # bring the published posts
+    recent_post_list = posts.order_by('-published_date')[1:6] # latest 5 posts excluding the last one. Because it is already  posted above
+    last_post = posts.first() #since reverse ordered based on published date, first birings the latest post
     post_numbers_in_each_category = Category.objects.annotate(nblog=Count('post'))
     
     # popular posts of the last week
     popular_posts = posts.annotate(readlike_count=Count('postview') + Count('like')).filter(readlike_count__gt=2)[:5]
     lastweek = date.today() - timedelta(weeks=1) # https://stackoverflow.com/questions/62035327/filtering-posts-from-yesterday-last-week-and-last-month-doesnt-work
-    popular_posts_last_week = posts.filter(publish_date__gt=lastweek).annotate(readlike_count=Count('postview') + Count('like')).filter(readlike_count__gte=2)
+    popular_posts_last_week = posts.filter(published_date__gt=lastweek).annotate(readlike_count=Count('postview') + Count('like')).filter(readlike_count__gte=2)
     print(popular_posts)
     print(popular_posts_last_week)
     
@@ -181,7 +186,7 @@ def post_create(request):
 
 """ class PostCreate(CreateView):
     model = Post
-    fields = ['title', 'content', 'blogger', 'category', 'status', 'published_date', 'image']
+    fields = ['title', 'content', 'summary','blogger', 'category', 'status', 'published_date', 'image']
     initial = {'published_date': '11/06/2020'} """
 
 @login_required()
@@ -232,11 +237,7 @@ def like(request, slug):
     
     return redirect('dastugo_blog_app:post-detail', slug=slug) # if it is a get then redirect to post-detail
 
-# class-based views
-""" class HomeView(generic.ListView): #this home page works as post list view
-   model = Post
-   template_name = 'dastugo_blog_app/post_list.html'
-   paginate_by = 4 """
+
 
 class PostDetailView(generic.DetailView): #not used currently, just a sample ckass-based view
 #class PostDetailView(HitCountDetailView): # $ pip install django-hitcount # https://www.yellowduck.be/posts/counting-hits-objects-django/
@@ -260,4 +261,4 @@ class PostsByBloggerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Post.objects.filter(blogger=self.request.user).filter(status__exact='p').order_by('publish_date')
+        return Post.objects.filter(blogger=self.request.user).filter(status__exact='p').order_by('published_date')

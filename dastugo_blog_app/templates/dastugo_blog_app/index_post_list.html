@@ -30,7 +30,7 @@
                             <ul>
                                 <li>
                                     <a href="#">
-                                        <i class="far fa-calendar-alt"></i> {{last_post.publish_date.date}}</a>
+                                        <i class="far fa-calendar-alt"></i> {{last_post.published_date.date}}</a>
                                 </li>
                                 <li class="mx-2">
                                     <a href="#">
@@ -131,7 +131,7 @@
                                 <p>{{most_liked_post.content|truncatechars:50}}</p>
                                 <a href="{% url 'dastugo_blog_app:underconst' %}" class="btn btn-primary read-m">Read More</a>
                             </div>
-                            <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_liked_post.publish_date|timesince }} ago.</a>                               </p>
+                            <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_liked_post.published_date|timesince }} ago.</a>                               </p>
                             <ul class="blog-icons">
                                 <li class="mx-2">
                                     <a href="#">
@@ -162,7 +162,7 @@
                                 <p>{{most_read_post.content|truncatechars:50}}</p>
                                 <a href="{% url 'dastugo_blog_app:underconst' %}" class="btn btn-primary read-m">Read More</a>
                             </div>
-                            <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_read_post.publish_date|timesince }} ago.</a>                               </p>
+                            <p> <a href="#"> <i class="far fa-clock"></i> Posted {{ most_read_post.published_date|timesince }} ago.</a>                               </p>
                             <ul class="blog-icons">
                                 <li class="mx-2">
                                     <a href="#">
@@ -242,7 +242,7 @@
                                     </h5>
                                     <div class="sub-meta">
                                         <span>
-                                            <i class="far fa-clock"></i> {{post.publish_date.date}}</span>
+                                            <i class="far fa-clock"></i> {{post.published_date.date}}</span>
                                     </div>
                                 </div>
                             </div>

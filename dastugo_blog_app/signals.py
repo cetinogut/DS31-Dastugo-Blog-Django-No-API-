@@ -5,7 +5,7 @@ from .models import Post
 from .utils import get_random_code
 
 
-@receiver(pre_save, sender=Post) # before saving do this action first
+@receiver(pre_save, sender=Post) # before saving do this action first, look into app.py as well
 def pre_save_create_slug(sender, instance, **kwargs): # instance is the Post instance, *kwargs required because we don't know the # of args in the background
     if not instance.slug:
         instance.slug = slugify(

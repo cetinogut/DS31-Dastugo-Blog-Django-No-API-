@@ -22,13 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-from decouple import config
+from decouple import config # pip install python-decouple
 
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+#DEBUG = config('DEBUG', default=True, cast=bool) # You can add an extra argument to the config function, to define a default value, in case there is an undefined value in the .env file. 
+                                                   #Attention to the cast argument. Django expects DEBUG to be a boolean.
+#ALLOWED_HOSTS=.localhost, .herokuapp.com
+#ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv()) #the library comes with a Csv Helper, so you don’t need to write all this code. 
 ALLOWED_HOSTS = []
 
 
@@ -44,9 +47,12 @@ INSTALLED_APPS = [
     # 3rd party apps,
     'crispy_forms',
     'storages' ,
+    'rest_framework',
+    'corsheaders',
     # my apps
     'dastugo_blog_app',
     'dastugo_user_app',
+    'dastugo_blog_api',
     
     
 ]
@@ -55,6 +61,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -118,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
@@ -134,7 +141,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 ## https://stackabuse.com/serving-static-files-in-python-with-django-aws-s3-and-whitenoise/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -168,7 +174,7 @@ LOGIN_REDIRECT_URL = '/index' #
 
 LOGIN_URL = "login" # default accounts/login
 
-# While developing you can use the lin ebelow to skip the actual email sending. it generates a confirmation link on the console
+# While developing you can use the line below to skip the actual email sending. it generates a confirmation link on the console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #The password reset system requires that your website supports email, which is beyond the scope of this article, so this part won't work yet. To allow testing, put the following line at the end of your settings.py file. This logs any emails sent to the console (so you can copy the password reset link from the console).
 
@@ -184,3 +190,24 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 import django_heroku
 django_heroku.settings(locals())
+
+# rest frame work project level permissions
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny', # If not specified, this setting defaults to allowing unrestricted access:
+        #'rest_framework.permissions.IsAuthenticated', # only logged in user can access the endpoints
+    ]
+}
+
+#CORS_ORIGIN_WHITELIST = [
+ #    'http://localhost:3000' # this is the react front end url and port
+#]
+
+CORS_ALLOWED_ORIGINS = [ # Previously this setting was called CORS_ORIGIN_WHITELIST, which still works as an alias, with the new name taking precedence.
+    "http://localhost:3000",
+  #  "http://127.0.0.1:3000",
+   # "http://localhost:8080",
+    #"http://127.0.0.1:8000",
+]
+
+#CORS_ALLOW_ALL_ORIGINS: True # Setting this to True can be dangerous, as it allows any website to make cross-origin requests to yours.

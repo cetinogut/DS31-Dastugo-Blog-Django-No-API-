@@ -22,7 +22,8 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("dastugo_blog_app.urls")),
+    path("blog/", include("dastugo_blog_app.urls", namespace="dastugo_blog_app")),
+    path("api/", include("dastugo_blog_api.urls", namespace="dastugo_blog_api")),
     path("users/", include("dastugo_user_app.urls")),
     path(
         "favicon.ico",

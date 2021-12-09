@@ -18,7 +18,7 @@ class PostForm(forms.ModelForm):
             'image',
             'content',
             'status',
-            'publish_date',
+            'published_date',
         )
 
 class CommentForm(forms.ModelForm):
