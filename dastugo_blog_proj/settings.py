@@ -191,12 +191,22 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 import django_heroku
 django_heroku.settings(locals())
 
-# rest frame work project level permissions
+# rest frame work project level permissions :
+# AllowAny
+# IsAuthenticated
+# IsAdminUser
+# IsAuthenticatedOrReadOnly
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny', # If not specified, this setting defaults to allowing unrestricted access:
         #'rest_framework.permissions.IsAuthenticated', # only logged in user can access the endpoints
-    ]
+        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        
+    ],
+        
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 #CORS_ORIGIN_WHITELIST = [
@@ -211,3 +221,6 @@ CORS_ALLOWED_ORIGINS = [ # Previously this setting was called CORS_ORIGIN_WHITEL
 ]
 
 #CORS_ALLOW_ALL_ORIGINS: True # Setting this to True can be dangerous, as it allows any website to make cross-origin requests to yours.
+
+# custom user model
+AUTH_USER_MODEL = "dastugo_user_app.NewUser"
