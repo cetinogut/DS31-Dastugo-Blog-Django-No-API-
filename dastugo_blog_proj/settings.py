@@ -199,13 +199,11 @@ django_heroku.settings(locals())
 # IsAuthenticatedOrReadOnly
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny', # If not specified, this setting defaults to allowing unrestricted access:
+        #'rest_framework.permissions.AllowAny', # If not specified, this setting defaults to allowing unrestricted access:
         #'rest_framework.permissions.IsAuthenticated', # only logged in user can access the endpoints
-        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-        
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
-        
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': ( # when we add JWT auth, django rest framework's api-auth login will not work anymore.
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
@@ -216,7 +214,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [ # Previously this setting was called CORS_ORIGIN_WHITELIST, which still works as an alias, with the new name taking precedence.
     "http://localhost:3000",
-  #  "http://127.0.0.1:3000",
+    #"http://127.0.0.1:3000",
    # "http://localhost:8080",
     #"http://127.0.0.1:8000",
 ]
@@ -227,32 +225,18 @@ CORS_ALLOWED_ORIGINS = [ # Previously this setting was called CORS_ORIGIN_WHITEL
 #AUTH_USER_MODEL = "dastugo_user_app.NewUser"
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True, # to blacklist tokens
-    'UPDATE_LAST_LOGIN': False,
-
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
-    #'SIGNING_KEY': settings.SECRET_KEY,
+    'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
-    'AUDIENCE': None,
-    'ISSUER': None,
-    'JWK_URL': None,
-    'LEEWAY': 0,
-
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
-    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'AUTH_HEADER_TYPES': ('JWT',),
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
-    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
-
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
-
-    'JTI_CLAIM': 'jti',
-
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' } ##added for corapi

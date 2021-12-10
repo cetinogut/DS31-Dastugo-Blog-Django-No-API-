@@ -7,7 +7,11 @@ from .forms import PasswordResetEmailCheck
 app_name = 'dastugo_user_app'
 
 urlpatterns = [
-    path("register/", register, name="register"), # in Django Web framwork app
+    #path('create/', CustomUserCreate.as_view(), name="create_user"), #added for API
+    #path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), # added for aPI
+     #    name='blacklist'),
+    
+    path("register/", register, name="register"), # in Django Web framework app
     path("profile/", profile, name="profile"),
     path("login/", auth_views.LoginView.as_view(template_name="dastugo_user_app/login.html"), name="login"), # name must be login. can't change it
     path("logout/", auth_views.LogoutView.as_view(template_name="dastugo_user_app/logout.html"), name="logout"),
@@ -19,8 +23,6 @@ urlpatterns = [
         template_name='dastugo_user_app/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='dastugo_user_app/password_reset_complete.html'), name='password_reset_complete'),    
-    path('create/', CustomUserCreate.as_view(), name="create_user"), #added for API
-    path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), # added for aPI
-         name='blacklist')
+   
 ]
 
