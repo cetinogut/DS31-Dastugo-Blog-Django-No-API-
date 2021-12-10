@@ -17,7 +17,7 @@ class Profile(models.Model):
     def __str__(self):
         return "{} {}".format(self.user, 'Profile')
     
-class CustomAccountManager(BaseUserManager):
+""" class CustomAccountManager(BaseUserManager):
 
     def create_superuser(self, email, user_name, first_name, password, **other_fields):
 
@@ -44,9 +44,9 @@ class CustomAccountManager(BaseUserManager):
                           first_name=first_name, **other_fields)
         user.set_password(password)
         user.save()
-        return user
+        return user """
 
-
+""" 
 class NewUser(AbstractBaseUser, PermissionsMixin): ##overriding the default user name table
 
     email = models.EmailField(_('email address'), unique=True) # instead of user name we will use e-mail to authenticate
@@ -64,4 +64,4 @@ class NewUser(AbstractBaseUser, PermissionsMixin): ##overriding the default user
     REQUIRED_FIELDS = ['user_name', 'first_name']
 
     def __str__(self):
-        return self.user_name
+        return self.user_name """
