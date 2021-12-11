@@ -22,16 +22,16 @@
 
                 {% endif %}
                 <span class="mx-lg-4 mx-md-2  mx-1">
-                    <a href="{% url 'logout' %}">
+                    <a href="{% url 'dastugo_user_app:logout' %}">
                         <i class="fas fa-lock"></i> Logout</a>
                 </span>
                 {% else %}
                 <span class="mx-lg-4 mx-md-2  mx-1">
-                    <a href="{% url 'login' %}">
+                    <a href="{% url 'dastugo_user_app:login' %}">
                         <i class="fas fa-lock"></i> Sign In</a>
                 </span>
                 <span>
-                    <a href="{% url 'register' %}">
+                    <a href="{% url 'dastugo_user_app:register' %}">
                         <i class="far fa-user"></i> Register</a>
                 </span>
                 {% endif %}

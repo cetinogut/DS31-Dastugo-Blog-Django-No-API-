@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
     path("api/", include("dastugo_blog_api.urls", namespace="dastugo_blog_api")),
-    path('api/user/', include('dastugo_user_app.urls', namespace='dastugo_user_app')),
+    #path('api/user/', include('dastugo_user_app.urls', namespace='dastugo_user_app')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')), # API level auth screens  came via this route, this is built in by rest framwork to simulate user login etc.. We will use this end-points to login from REact
    
     path("blog/", include("dastugo_blog_app.urls", namespace="dastugo_blog_app")),

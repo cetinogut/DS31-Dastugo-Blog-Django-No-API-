@@ -16,10 +16,10 @@
                     <ul class="nav justify-content-end ">
                         {% if user.is_authenticated %} 
                         <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                            <a class="nav-item nav-link" href="{% url 'dastugo_user_app:logout' %}">Logout</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                            <a class="nav-item nav-link" href="{% url 'dastugo_user_app:profile' %}">Profile</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-item nav-link" href="{% url 'dastugo_blog_app:post-create' %}">New Post</a>
@@ -27,10 +27,10 @@
                         
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                            <a class="nav-item nav-link" href="{% url 'dastugo_user_app:login' %}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                            <a class="nav-item nav-link" href="{% url 'dastugo_user_app:register' %}">Register</a>
                         </li>
                         {% endif %} 
                     </ul>
