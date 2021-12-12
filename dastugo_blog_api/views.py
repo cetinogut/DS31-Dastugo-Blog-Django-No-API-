@@ -2,9 +2,9 @@ from rest_framework import generics
 from rest_framework import permissions
 from dastugo_blog_app.models import Post
 from .serializers import PostSerializer
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated,IsAdminUser, DjangoModelPermissionsOrAnonReadOnly, DjangoModelPermissions, BasePermission, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import SAFE_METHODS, AllowAny,IsAuthenticated,IsAdminUser, DjangoModelPermissionsOrAnonReadOnly, DjangoModelPermissions, BasePermission, IsAuthenticatedOrReadOnly
 from rest_framework import viewsets
-from rest_framework import filters
+from rest_framework import filters #added for search functionality
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
@@ -16,8 +16,9 @@ class PostUserWritePermission(BasePermission):
             return True # read only 
         return obj.blogger == request.user
 
-class PostList(viewsets.ModelViewSet):
-    permission_classes = [PostUserWritePermission]
+### model viewset works with router better, since commented route in urls.py, commented here as well. other wise it will generate The `actions` argument must be provided when calling `.as_view()` on a ViewSet. For example `.as_view({'get': 'list'})` error.  Refer to django-rest-framework docs
+class PostList(viewsets.ModelViewSet): # http://127.0.0.1:8000/api/ and http://127.0.0.1:8000/api/16/ and http://127.0.0.1:8000/api/lastweek-serap-software-kasm-32686ccd31/ because of routers # returns all posts with get_queryset, and post slugs withget_object
+    permission_classes = [PostUserWritePermission] # user can see all posts in list  and detail but edits only own posts
     serializer_class = PostSerializer
     #queryset = Post.objects.all()  # this 4 lines do all listing and detail calls
     #instead of default queryset  above we can define a custom one as below... only one can be used
@@ -31,7 +32,40 @@ class PostList(viewsets.ModelViewSet):
         item = self.kwargs.get('pk')
         return get_object_or_404(Post, slug=item)
 
-    
+class PostListForBlogger(generics.ListAPIView): # a custom view for filtering blog posts of a logged-in user
+    permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Post.objects.filter(blogger=user)
+
+class PostDetailWithSlugFromParams(generics.ListAPIView): # get the slug from frontend params and return related post from backend, this is a search filter like view and only worls with ListViews not with RetrieveViews
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        slug = self.request.query_params.get('slug', None)
+        print(slug)
+        return Post.objects.filter(slug=slug) # http://127.0.0.1:8000/api/posts/?slug=dogan-blog-2-selamlar-dogut
+
+class PostListDetailFilter(generics.ListAPIView):
+
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^slug']
+
+    # '^' Starts-with search.
+    # '=' Exact matches.
+    # '@' Full-text search. (Currently only supported Django's PostgreSQL backend.)
+    # '$' Regex search.
+
+class PostSearchBlogger(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^blogger'] 
 
 #####ViewSet ####
 """ class PostList(viewsets.ViewSet):
@@ -67,22 +101,38 @@ class PostList(viewsets.ModelViewSet):
     #     pass
     
 ######Generic Views####
-""" 
-class PostList(generics.ListCreateAPIView, ):
+
+class PostListAllPublished(generics.ListCreateAPIView, ):
     #permission_classes= [IsAdminUser] # view level permission based on model
     #permission_classes= [DjangoModelPermissionsOrAnonReadOnly]
     #permission_classes= [DjangoModelPermissions]
     permission_classes= [IsAuthenticatedOrReadOnly]
     #queryset = Post.posted_objects.all() ##smth wrong the list coming empty
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(status="p")
     serializer_class = PostSerializer
 
-
-class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
+class PostDetailWithId(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission): # default view filtering with pk
     permission_classes= [PostUserWritePermission]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
- """
+
+class PostDetailWithId2(generics.ListAPIView): # a custom view for filtering blog posts of a logged-in user
+    #permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        post_id = self.kwargs['pk']
+        print(post_id)
+        return Post.objects.filter(id=post_id)
+    
+class PostDetailWithSlug(generics.ListAPIView): # a custom view for filtering blog posts of a logged-in user
+    #permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        post_slug = self.kwargs['slug']
+        print(post_slug)
+        return Post.objects.filter(slug=post_slug)
 
 """ Concrete View Classes
 #CreateAPIView

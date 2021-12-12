@@ -7,9 +7,9 @@ from .forms import PasswordResetEmailCheck
 app_name = 'dastugo_user_app'
 
 urlpatterns = [
-    #path('create/', CustomUserCreate.as_view(), name="create_user"), #added for API
-    #path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), # added for aPI
-     #    name='blacklist'),
+    path('create/', CustomUserCreate.as_view(), name="create_user"), #added for API
+    path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), # added for aPI
+         name='blacklist'),
     
     path("register/", register, name="register"), # in Django Web framework app
     path("profile/", profile, name="profile"),
@@ -25,4 +25,3 @@ urlpatterns = [
         template_name='dastugo_user_app/password_reset_complete.html'), name='password_reset_complete'),    
    
 ]
-
