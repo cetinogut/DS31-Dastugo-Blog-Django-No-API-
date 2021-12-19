@@ -4,10 +4,13 @@ from django.urls import reverse #Used to generate URLs by reversing the URL patt
 from django.contrib.auth.models import User #Blog author or commentor
 from .utils import get_random_digit # to generate a randon one digit number for comment, like view count at the initial stage, 
 from django.utils import timezone #to mark the blog posts with timestamp
+from django.utils.translation import gettext_lazy as _ # potential translation readiness
 
 def user_directory_path(instance, filename): # creates a folder named after blogger id in media folder for user uploaded images
     return 'blog_pics/{0}/{1}'.format(instance.blogger.id, filename)
 
+def upload_to(instance, filename):
+    return 'blog_pics/{filename}'.format(filename=filename)
 
 class Category(models.Model):
     """
@@ -35,7 +38,8 @@ class Post(models.Model):
     class PublishedPostsManager(models.Manager): # a custom model manager to list only published posts
         def get_queryset(self):
             return super().get_queryset() .filter(status='Published')
-        
+    
+     
     title = models.CharField(max_length=200)
     blogger = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='blog_posts')
     # Foreign Key used because post can only have one author/User, but bloggsers can have multiple posts.
@@ -46,8 +50,10 @@ class Post(models.Model):
     updated_date = models.DateTimeField(auto_now = True)
     slug = models.SlugField(max_length=200, unique=True, blank=True) # how-to-learn-django
     status = models.CharField(max_length=20, choices=STATUS, default='d') 
-    #image = models.ImageField(upload_to='blog_pics', default='media/default_post_image.png', blank=True)
-    image = models.ImageField(upload_to=user_directory_path, default='default_post_image.png', blank=True)
+    #image = models.ImageField(upload_to='blog_pics', default='blog_pics/default_post_image.png', blank=True)
+    #image = models.ImageField(upload_to=user_directory_path, default='default_post_image.png', blank=True)
+    image = models.ImageField(
+        _("Image"), upload_to=upload_to, default='blog_pics/default_post_image.jpg')   
     # ManyToManyField used because a category can contain many posts. Posts can cover many categories.
     # Category class has already been defined so we can specify the object below.
     category = models.ManyToManyField(Category, help_text='Select  category(ies) for this post')

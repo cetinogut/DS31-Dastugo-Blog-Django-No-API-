@@ -28,8 +28,8 @@ from decouple import config # pip install python-decouple
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = config('DEBUG', default=True, cast=bool) # You can add an extra argument to the config function, to define a default value, in case there is an undefined value in the .env file. 
+#DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool) # You can add an extra argument to the config function, to define a default value, in case there is an undefined value in the .env file. 
                                                    #Attention to the cast argument. Django expects DEBUG to be a boolean.
 #ALLOWED_HOSTS=.localhost, .herokuapp.com
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv()) #the library comes with a Csv Helper, so you don’t need to write all this code. 
@@ -151,9 +151,10 @@ STATICFILES_DIRS = ( # we can put static files in the project level folder. but 
     os.path.join(BASE_DIR, 'static'),
 )
 
-MEDIA_URL = '/media/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-#create these folders at project level as /media/avatar_pics
+MEDIA_URL = '/media/'
+#create these folders at project level as /media/
 
 # aws settings
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -172,7 +173,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #LOGIN_REDIRECT_URL = '/' # 
 LOGIN_REDIRECT_URL = '/index' # 
-#LOGIN_REDIRECT_URL = "dastugo_blog_app/post-list" # this is not work 
+#LOGIN_REDIRECT_URL = "dastugo_blog_app/post-list" # this is not working
 
 LOGIN_URL = "login" # default accounts/login
 
@@ -198,13 +199,15 @@ django_heroku.settings(locals())
 # IsAdminUser
 # IsAuthenticatedOrReadOnly
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema', ##added for corapi
     'DEFAULT_PERMISSION_CLASSES': [
         #'rest_framework.permissions.AllowAny', # If not specified, this setting defaults to allowing unrestricted access:
-        #'rest_framework.permissions.IsAuthenticated', # only logged in user can access the endpoints
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated', # only logged in user can access the endpoints
+        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': ( # when we add JWT auth, django rest framework's api-auth login will not work anymore.
-        #'rest_framework_simplejwt.authentication.JWTAuthentication', # while working on API development side, we can tıurn off this feature for easiness
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # while working on API development side, we can tıurn off this feature for easiness
+        #'rest_framework.authentication.BasicAuthentication',
     )
 }
 
@@ -214,7 +217,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [ # Previously this setting was called CORS_ORIGIN_WHITELIST, which still works as an alias, with the new name taking precedence.
     "http://localhost:3000",
-    #"http://127.0.0.1:3000",
+    "http://127.0.0.1:3000",
    # "http://localhost:8080",
     #"http://127.0.0.1:8000",
 ]
@@ -238,5 +241,3 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
-
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' } ##added for corapi
